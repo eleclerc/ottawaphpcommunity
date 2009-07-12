@@ -2,17 +2,10 @@
 /**
  *
  * */
-class Model_DbTable_BlogPost extends Zend_Db_Table_Abstract
+class Model_DbTable_Tag extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'blog_post';
+    protected $_name = 'tag';
     protected $_primary = 'id';
-
-    protected $_referenceMap = array(
-        'Blog' => array(
-            'columns'   =>  'blog_id',
-            'refTableClass' => 'Model_DbTable_Blog',
-            'refcolumns' => 'id')
-        );
 
     /**
      * When updating a row, update the 'updated_at' date
@@ -41,7 +34,6 @@ class Model_DbTable_BlogPost extends Zend_Db_Table_Abstract
         if (empty($data['created_at'])) {
             $data['created_at'] = new Zend_Db_Expr('now()');
         }
-        
         if (empty($data['updated_at'])) {
             $data['updated_at'] = new Zend_Db_Expr('now()');
         }

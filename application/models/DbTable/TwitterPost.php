@@ -24,7 +24,7 @@ class Model_DbTable_TwitterPost extends Zend_Db_Table_Abstract
     public function update(array $data, $where)
     {
         if (empty($data['updated_at'])) {
-            $data['updated_at'] = new Zend_Db_Expr('datetime("now")');
+            $data['updated_at'] = new Zend_Db_Expr('now()');
         }
         
         return parent::update($data, $where);
@@ -39,11 +39,11 @@ class Model_DbTable_TwitterPost extends Zend_Db_Table_Abstract
     public function insert(array $data)
     {
         if (empty($data['created_at'])) {
-            $data['created_at'] = new Zend_Db_Expr('datetime("now")');
+            $data['created_at'] = new Zend_Db_Expr('now()');
         }
         
         if (empty($data['updated_at'])) {
-            $data['updated_at'] = new Zend_Db_Expr('datetime("now")');
+            $data['updated_at'] = new Zend_Db_Expr('now()');
         }
         
         return parent::insert($data);
