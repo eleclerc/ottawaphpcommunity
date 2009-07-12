@@ -38,3 +38,29 @@ h3 a, h4 a {
 h3, h4 {
     margin-bottom: 0.4em;
 }
+
+/* Navigation */
+body>nav {
+    margin: 1em;
+    background-color: #cfcfcf;
+}
+body>nav:after {
+    content: ".";
+    clear: both;
+    height: 0;
+    visibility: hidden;
+    display: block;
+}
+body>nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 1em;
+}
+body>nav ul li {
+    display: inline;
+    font-weight: bold;
+    padding: 0 1em 0 1em;
+}
+body>nav ul li a {
+    color: #000;
+}
