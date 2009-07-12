@@ -1,0 +1,12 @@
+.DS_Store
+.buildpath
+.cache
+.project
+.settings
+application/opc.db
+library/ZFDebug
+library/Zend
+library/ZendX
+zf.php
+
+

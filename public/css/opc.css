@@ -1,0 +1,40 @@
+section, article, aside, header, footer, nav, dialog, figure {
+     display:block;
+}
+
+header {
+    border-bottom: 1px solid #000;
+}
+
+#blog {
+    width: 60%;
+    float: left;
+}
+
+#twitter {
+    width : 35%;
+    float: right;
+    border-left: 1px dashed #CFCFCF;
+    padding-left: 1em;
+}
+
+footer {
+    padding-top: 2em;
+    clear:both;
+}
+
+h2 {
+    border-bottom: 1px dashed #CFCFCF;
+}
+h3 a, h4 a {
+    text-decoration: none;
+    color: #111;
+}
+
+#blog article {
+    padding: 1em;
+}
+
+h3, h4 {
+    margin-bottom: 0.4em;
+}
