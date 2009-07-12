@@ -1,6 +1,9 @@
 <?php
-
-//TODO add Zend_Log
+/**
+ * script/cronjob to get content from blog and twitter
+ *
+ * @TODO add Zend_Log
+ */
 
 define('APPLICATION_ENV', 'development');
 
@@ -11,42 +14,35 @@ $script->run();
 
 class FetchContent
 {
-    // Content need one of these words to be accepted
-    //TODO move this in db
-    public $whitelist = array(
-        'php',
-        'zend',
-        'symfony',
-        'cakephp',
-        'codeigniter',
-        'pear',
-        'pecl',
-        'codeigniter',
-        'yii',
-        'flow3',
-        'recess',
-        'limonade',
-        'wordpress',
-        'drupal',
-        'joomla');
+    // Content need one of these words to be accepted (from db)
+    public $whitelist;
     
     // Used to tokenize content before verifiying acceptance
-    public $tokens = " \n\t!.,?";
+    public $tokens = " \n\t!.,?_";
     
     protected $_db;
     
-    function __construct($application)
+    public function __construct($application)
     {
         $application->getBootstrap()->bootstrap(array('autoload', 'db'));
+        $this->_db = $application->getBootstrap()->getResource('db');
+        
+        $this->whitelist = $this->_db->fetchCol('SELECT LOWER(tag) FROM tag');
     }
- 
-    function run()
+
+    /**
+    * Main Entry Point
+    * */
+    public function run()
     {
         $this->getBlogs();
-        $this->getMicroblogs();
+        $this->getTwitter();
     }
     
-    function getBlogs()
+    /**
+     * Fetch blogs content from rss/atom feed
+     * */
+    public function getBlogs()
     {
         $blog = new Model_DbTable_Blog();
         $blogPost = new Model_DbTable_BlogPost();
@@ -94,7 +90,10 @@ class FetchContent
         }
     }
     
-    function getMicroblogs()
+    /**
+     * Get twitter Content 
+     */
+    public function getTwitter()
     {
         $timelineUrl = 'http://twitter.com/statuses/user_timeline/';
         
@@ -140,7 +139,7 @@ class FetchContent
     * @var string
     * @return boolean
     * */
-    function isAcceptable($val) 
+    public function isAcceptable($val) 
     {
         $tokenized = array();
         
@@ -172,7 +171,7 @@ class FetchContent
      * @var string
      * @return string plain text
      * */
-    function cleanContent($val)
+    public function cleanContent($val)
     {
        $stripped = false;
         // if longer than 80 chars, cut it
