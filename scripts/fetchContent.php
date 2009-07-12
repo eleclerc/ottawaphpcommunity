@@ -51,7 +51,7 @@ class FetchContent
         $blog = new Model_DbTable_Blog();
         $blogPost = new Model_DbTable_BlogPost();
         
-        foreach ($blog->fetchAll() as $blog) {
+        foreach ($blog->fetchAll('live = 1') as $blog) {
             echo PHP_EOL . 'fetching blog: ' . $blog->feed . PHP_EOL;
         
             try { 
@@ -103,7 +103,7 @@ class FetchContent
         $twitter = new Model_DbTable_Twitter();
         $twitterPost = new Model_DbTable_TwitterPost();
 
-        foreach ($twitter->fetchAll() as $account) {
+        foreach ($twitter->fetchAll('live = 1') as $account) {
             echo PHP_EOL . 'fetching tweet: ' . $account->screen_name . PHP_EOL;
         
             $client->setUri($timelineUrl . $account->screen_name . '.json');
