@@ -1,24 +1,2 @@
-<section id="blog">
-<h2>Blog</h2>
-<?php foreach ($this->blogposts as $post): ?>
-    <article>
-        <h3><a href="<?php echo $post['oriUrl'] ?>"><?php echo $post['title'] ?></a></h3>
-        <em>on <?php echo date('Y-m-d', strtotime($post['posted_on'])) ?> 
-            from <a href="<?php echo $post['url'] ?>"><?php echo $post['url'] ?></a></em>
-        <p><?php echo $post['content'] ?></p>
-        <em><a href="<?php echo $post['oriUrl'] ?>">read the original source</a></em>
-    </article>
-<?php endforeach; ?>
-</section>
-
-<section id="twitter">
-<h2>Twitter</h2>
-<?php foreach ($this->tweets as $post): ?>
-    <article>
-        <h4><a href="http://twitter.com/<?php echo $post['screen_name'] ?>"><?php echo $post['screen_name']; ?></a></h4>
-        <em>on <?php echo date('Y-m-d', strtotime($post['posted_on'])) ?> at <?php echo date('H:i:s', strtotime($post['posted_on'])) ?></em>
-        <p><?php echo $post['content'] ?></p>
-    </article>
-<?php endforeach; ?>
-</section>
-
+<h1>Coming Soon</h1>
+<h2>summer 2009</h2>
