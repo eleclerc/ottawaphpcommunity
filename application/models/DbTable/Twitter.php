@@ -41,4 +41,14 @@ class Model_DbTable_Twitter extends Zend_Db_Table_Abstract
         
         return parent::insert($data);
     }
+    
+    /**
+     * Get the list of Twitter account
+     */
+    public function getActiveAccounts()
+    {
+        $select = $this->select()->order('screen_name')->where('live = 1');
+        
+        return $this->fetchAll($select);
+    }
 }

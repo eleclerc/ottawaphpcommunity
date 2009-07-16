@@ -41,4 +41,14 @@ class Model_DbTable_Blog extends Zend_Db_Table_Abstract
         
         return parent::insert($data);
     }
+    
+    /**
+     * Get the list of blog
+     */
+    public function getActiveAccounts()
+    {
+        $select = $this->select()->order('url')->where('live = 1');
+        
+        return $this->fetchAll($select);
+    }
 }

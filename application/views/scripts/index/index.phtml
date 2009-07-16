@@ -1,2 +1,76 @@
-<h1>Coming Soon</h1>
-<h2>summer 2009</h2>
+<!-- main -->
+<div id="main" class="grid_8">
+
+    <?php foreach ($this->blogposts as $post): ?>
+
+        <h2><a href="<?php echo $post['oriUrl'] ?>"><?php echo $post['title'] ?></a></h2>
+
+        <p class="post-info">Posted by <a href="<?php echo $post['url'] ?>"><?php echo $post['url'] ?></a> |
+          <span class="date"><?php echo date('Y-m-d', strtotime($post['posted_on'])) ?></span></p>
+
+        <p><?php echo $post['content'] ?></p>
+
+        <p class="postmeta">
+          <a href="<?php echo $post['oriUrl'] ?>" class="readmore">Read the complete/original post</a> |
+          matches <?php echo implode(', ', Zend_Json::decode($post['tags'])) ?></p>
+
+    <?php endforeach; ?>
+
+<!-- main ends -->
+</div>
+
+<!-- left-columns starts -->
+<div id="left-columns" class="grid_8">
+
+    <div class="grid_4 alpha">
+
+        <h3>NEXT EVENT</h3>
+        <div class="featured-post">
+        <h4>July 16, 2009</h4>
+        <p>Teamcamp at 6pm at The Code Factory. More info at <a href="http://teamcamp.ca">teamcamp.ca</a></p>
+        </div>
+
+        <h3>heard on Twitter</h3>
+
+        <?php foreach ($this->tweets as $post): ?>
+
+            <div class="featured-post">
+                <h4><a href="http://twitter.com/<?php echo $post['screen_name'] ?>"><?php echo $post['screen_name'] ?></a></h4>
+                <p class="post-info">Posted on <?php echo date('Y-m-d', strtotime($post['posted_on'])) ?> at <?php echo date('H:i:s', strtotime($post['posted_on'])) ?></p>
+                <p><?php echo $post['content'] ?></p>
+            </div>
+
+        <?php endforeach; ?>
+
+
+    </div>
+
+    <div class="grid_4 omega">
+        <div class="sidemenu">
+            <h3>Blogs from OPC</h3>
+            <ul>
+            <?php foreach($this->blogAccounts as $account): ?>
+                <li><a href="<?php echo $account['url'] ?>"><?php echo str_replace('http://', '', $account['url']) ?></a></li>
+            <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <div class="sidemenu">
+            <h3>OPC on Twitter</h3>
+            <ul>
+            <?php foreach($this->twitterAccounts as $account): ?>
+                <li><a href="http://twitter.com/<?php echo $account['screen_name'] ?>">@<?php echo $account['screen_name'] ?></a></li>
+            <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <h3>Add yourself</h3>
+        <p>If you're not on the list, and would like to appear on this website, 
+            send us a short email with your blog url or twitter username and we'll add you in a timely manner.</p>
+
+        <p>opc ]@[ phpcommunity.ca</p>
+
+    </div>
+
+<!-- end left-columns -->
+</div>

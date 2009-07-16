@@ -11,4 +11,4 @@ This is the source code of the OttawaPHPCommunity.ca website. A simple aggregato
 
 ## Contribute
 
-Everybody can contribute, we want to make the web better. The only requirement is to follow the ZF Coding Standards, and as we're picky, everything should run properly with E_STRICT error level.
+Everybody can contribute, we want to make the web better. The only requirement is to follow the ZF Coding Standards, and as we're (as in @danceric) picky, everything should run properly with E_STRICT error level.
