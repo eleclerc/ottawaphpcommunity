@@ -18,7 +18,7 @@ class FetchContent
     public $whitelist;
     
     // Used to tokenize content before verifiying acceptance
-    public $tokens = " \n\t!.,?_";
+    public $tokens = " \n\t!.,?_:";
     
     protected $_db;
     
@@ -142,11 +142,17 @@ class FetchContent
     {
         $tokenized = array();
         
+        $val = strtolower($val);
+        $val = strip_tags($val);
+
         //strip out url to avoid false positive
         $val = preg_replace('/((http:|https:|ftp:)\/\/(\S|\.|!|\?)+)/',
                             '',
                             $val);
         
+        //argh, some url don't have http://
+        $val = str_replace('.php', '', $val);
+
         //tokenize and build an array out of it
         $word = strtok($val, $this->tokens);
         while ($word !== false) {
