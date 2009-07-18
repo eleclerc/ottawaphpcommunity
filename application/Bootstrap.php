@@ -16,6 +16,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
     
     /**
+     * Initialize Google Analytics Tracker
+     * needs config in applications.ini as:
+     *   analytics.tracker = "UA-codeFromAnalytics-01"
+     * */
+    protected function _initAnalytics()
+    {
+        $analytics = $this->getOption('analytics');
+
+        if (!empty($analytics['tracker'])) {
+            $this->bootstrap('layout');
+            $layout = $this->getResource('layout');
+            $layout->analyticsTracker = $analytics['tracker'];            
+        }
+    }
+    
+    /**
      * Initialize the ZFDebug Bar
      */
     protected function _initZFDebug()
