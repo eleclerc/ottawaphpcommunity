@@ -3,16 +3,16 @@
 
     <?php foreach ($this->blogposts as $post): ?>
 
-        <h2><a href="<?php echo $post['oriUrl'] ?>"><?php echo $post['title'] ?></a></h2>
+        <h2><a href="<?php echo $post['url'] ?>"><?php echo $post['title'] ?></a></h2>
 
-        <p class="post-info">Posted by <a href="<?php echo $post['url'] ?>"><?php echo $post['url'] ?></a> |
+        <p class="post-info">Posted by <a href="<?php echo $post['blogUrl'] ?>"><?php echo preg_replace('/http:\/\//', '', $post['blogUrl']) ?></a> |
           <span class="date"><?php echo date('Y-m-d', strtotime($post['posted_on'])) ?></span></p>
 
         <p><?php echo $post['content'] ?></p>
 
         <p class="postmeta">
-          <a href="<?php echo $post['oriUrl'] ?>" class="readmore">Read the complete/original post</a> |
-          matches <?php echo implode(', ', Zend_Json::decode($post['tags'])) ?></p>
+          <a href="<?php echo $post['url'] ?>" class="readmore">Read the complete/original post</a>|
+          matches <span><?php echo implode(', ', Zend_Json::decode($post['tags'])) ?></span></p>
 
     <?php endforeach; ?>
 

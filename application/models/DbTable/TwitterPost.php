@@ -48,4 +48,23 @@ class Model_DbTable_TwitterPost extends Zend_Db_Table_Abstract
         
         return parent::insert($data);
     }
+    
+    /**
+     * Get the latest posts in the Twitter DB, with the twitter account info
+     *
+     * @param integer $limit number of results
+     * @return Zend_Db_Row
+     * */
+    public function getLatestPosts($limit=22)
+    {
+        // This rowset will not be updatable
+        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
+            ->setIntegrityCheck(false)
+            ->join('twitter', 'twitter.id=twitter_post.twitter_id', array('screen_name'))
+            ->where('twitter.live = ?', 1)
+            ->order('twitter_post.posted_on DESC')
+            ->limit($limit);
+
+        return $this->fetchAll($select);
+    }
 }

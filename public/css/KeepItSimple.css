@@ -476,6 +476,7 @@ input.button {
 .postmeta a.comments { margin: 0 10px 0 5px;	}
 .postmeta a.readmore { margin: 0 10px 0 5px;	}
 .postmeta .date{ margin: 0 10px 0 5px;	}
+.postmeta span { font-style: italic; }
 
 .post-info { font-size: .95em; padding-top: 3px; color: #B0B0B0; }
 .post-info a, .post-info a:visited { color: #000; border: none; }

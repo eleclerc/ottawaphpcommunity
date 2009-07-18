@@ -48,4 +48,23 @@ class Model_DbTable_BlogPost extends Zend_Db_Table_Abstract
         
         return parent::insert($data);
     }
+    
+    /**
+     * Get the latest blog posts from db, with blog info
+     *
+     * @param integer $limit number of results returned
+     * @return Zend_Db_Table_Rowset
+     * */
+    public function getLatestPosts($limit=15)
+    {
+        // This rowset will not be updatable
+        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
+            ->setIntegrityCheck(false)
+            ->join('blog', 'blog.id=blog_post.blog_id', array('blogUrl' => 'url'))
+            ->where('blog.live = ?', 1)
+            ->order('blog_post.posted_on DESC')
+            ->limit($limit);
+
+        return $this->fetchAll($select);
+    }
 }
