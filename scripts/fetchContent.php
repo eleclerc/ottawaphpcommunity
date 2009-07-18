@@ -35,8 +35,23 @@ class FetchContent
     * */
     public function run()
     {
+        //deal with command line argument 
+        try {
+            $opts = new Zend_Console_Getopt(array(
+                'discover|d' => 'special Twitter search for PHP around Ottawa (not saved)'));
+            $opts->parse();
+        } catch (Zend_Console_Getopt_Exception $e) {
+            echo $e->getUsageMessage();
+            exit;
+        }
+    
+        // if special argument is received
+        if (isset($opts->d)) {
+            $this->fetchTwitterSpecial();
+        } else {
         $this->fetchBlogs();
         $this->fetchTwitter();
+    }
     }
     
     /**
@@ -131,7 +146,32 @@ class FetchContent
             }
         }
     }
-    
+
+    /**
+     * Test function to search twitter for mention of php from user close to Ottawa
+     * */
+    public function fetchTwitterSpecial() 
+    {
+        // search tweets from user located 25km from downtown ottawa
+        // php, zend (framework), or symfony for now, because this is my favorite stuff this week
+        $searchUrl = 'http://search.twitter.com/search.json?q=zf+OR+zend+OR+php+OR+symfony&geocode=45.420263%2C-75.701637%2C25km';
+
+        $client = new Zend_Http_Client();
+        $client->setUri($searchUrl);
+        $response = $client->request();
+        $content = Zend_Json::decode($response->getBody());
+
+        if (!empty($content['results'])) {
+            echo 'You should consider these accounts:' . PHP_EOL;
+        }
+        foreach ($content['results'] as $tweet) {
+            $tags = $this->getTags($tweet['text']);
+            if (!empty($tags)) {
+                echo ' @' . $tweet['from_user'] . ': ' . $tweet['text'] . PHP_EOL;
+            }
+        }
+    }
+
     /**
     * check to see if post contains PHP related tags
     *
