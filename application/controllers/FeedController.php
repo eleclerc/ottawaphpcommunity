@@ -10,48 +10,70 @@ class FeedController extends Zend_Controller_Action
         $modelBlogpost = new Model_DbTable_BlogPost();
         $modelTwitterPost = new Model_DbTable_TwitterPost();
 
+        
+        $feedData = array(
+            'title' => 'Ottawa PHP Community',
+            'link'  => 'http://ottawaphpcommunity.ca/newfeed',
+            'published' => time(),
+            'charset' => 'UTF-8',
+            'description' => 'Aggregating the php developers in the Ottawa Valley');
+ 
         // Blog Posting
         foreach ($modelBlogpost->getLatestPosts() as $post) {
             $item = array(
-                'date'        => $post['posted_on'],
+                'sortCol'     => $post['posted_on'],
                 'title'       => $post['title'],
                 'link'        => $post['url'],
-                'pubDate'     => date('r', strtotime($post['posted_on'])),
+                'lastUpdate'  => strtotime($post['posted_on']),
                 'guid'        => $post['guid'],
-                'description' => $post['content'],
-                'contentType' => 'blog',
+                'description' => strip_tags($post['content']),
+                'content'     => $post['content'],
             );
         
             $data[] = $item;
         }
-
+        
+        $tweetDigest = array();
         // Twitter Posting
         foreach ($modelTwitterPost->getLatestPosts() as $post) {
-            $title = $post['content'];
-            if (strlen($title) > 45) {
-                $title = substr($title, 0, 45) . '|...|';
+            $day = date('Y-m-d', strtotime($post['posted_on']));
+            ini_set('display_errors', '1'); error_reporting(E_ALL); 
+            if ($day == date('Y-m-d')) {
+                // don't create digest for today... as it is not 'till it's done
+                continue;
             }
-        
-            $item = array(
-                'date'        => $post['posted_on'],
-                'title'       => $title,
-                'link'        => 'http://twitter.com/' . $post['screen_name'] . '/status/' . $post['guid'],
-                'pubDate'     => date('r', strtotime($post['posted_on'])),
-                'guid'        => $post['guid'],
-                'description' => $post['screen_name'] . ': ' . $post['content'],
-                'contentType' => 'twitter',
-            );
-        
-            $data[] = $item;
+
+            if (!isset($tweetDigest[$day])) {
+            
+                $tweetDigest[$day] = array(
+                    'sortCol'        => $post['posted_on'],
+                    'title'       => 'Tweets for ' . $day,
+                    'link'        => 'http://ottawaphpcommunity.ca',
+                    'lastUpdate'  => strtotime($post['posted_on']),
+                    'guid'        => 'http://ottawaphpcommunity.ca/#tweets-' . $day,
+                    'description' => '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL,
+                    'content'     => '<strong>@' . $post['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL,
+                    'contentType' => 'twitter',
+                );
+            } else {
+                $tweetDigest[$day]['description'] .= '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL;
+                $tweetDigest[$day]['content'] .= '<strong>@' . $post['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL;
+            }
         }
-    
+        
+        $entries = array_merge($data, $tweetDigest);
+
         // Order by date
         $sortable = array();
-        foreach ($data as $key => $val) {
-            $sortable[$key] = $val['date'];
+        foreach ($entries as $key => $val) {
+            $sortable[$key] = $val['sortCol'];
         }
-        array_multisort($sortable, SORT_DESC, $data);
-    
-        $this->view->data = $data;
+        array_multisort($sortable, SORT_DESC, $entries);
+        
+        $feedData['entries'] = $entries;
+        $rss = Zend_Feed::importArray($feedData ,'rss');
+        
+        $rss->send();
+        die();
     }
 }
