@@ -39,6 +39,36 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
     
     /**
+     * Initialize a default cache on some pages
+     * */
+    protected function _initPageCache()
+    {
+        $cacheConfig = $this->getOption('cache');
+
+        if ($cacheConfig['enabled']) {
+            $frontendOptions = array(
+                'lifetime' => $cacheConfig['general']['lifetime'],
+                'default_options' => array('cache' => 'false'),
+                // Only enable for these pages
+                'regexps' => array(
+                    '^/feed' => array('cache' => true),
+                    '^/$' => array('cache' => true)
+                )
+            );
+
+            $backendOptions = array('cache_dir' => APPLICATION_PATH . '/cache');
+
+            $cache = Zend_Cache::factory('Page',
+                'File',
+                $frontendOptions,
+                $backendOptions
+            );
+            
+            $cache->start();    
+        }
+    }
+    
+    /**
      * Initialize the ZFDebug Bar
      */
     protected function _initZFDebug()

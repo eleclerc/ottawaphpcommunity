@@ -1,0 +1,2 @@
+This directory is used if you enable cache in `application/config/application.ini`, 
+make sure it's writable/readable by your webserver
