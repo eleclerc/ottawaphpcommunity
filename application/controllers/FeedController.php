@@ -13,7 +13,7 @@ class FeedController extends Zend_Controller_Action
         
         $feedData = array(
             'title' => 'Ottawa PHP Community',
-            'link'  => 'http://ottawaphpcommunity.ca/newfeed',
+            'link'  => 'http://ottawaphpcommunity.ca/feed',
             'published' => time(),
             'charset' => 'UTF-8',
             'description' => 'Aggregating the php developers in the Ottawa Valley');
