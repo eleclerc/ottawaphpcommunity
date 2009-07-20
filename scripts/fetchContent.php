@@ -49,9 +49,14 @@ class FetchContent
         if (isset($opts->d)) {
             $this->fetchTwitterSpecial();
         } else {
-        $this->fetchBlogs();
-        $this->fetchTwitter();
-    }
+            $this->fetchBlogs();
+            $this->fetchTwitter();
+        }
+
+        // clear all cache
+        echo PHP_EOL . '->clearing cache' . PHP_EOL;
+        $cache = Zend_Cache::Factory('Page', 'File');
+        $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
     
     /**
@@ -66,31 +71,36 @@ class FetchContent
             echo PHP_EOL . 'fetching blog: ' . $blog->feed . PHP_EOL;
         
             try { 
-                $rss = Zend_Feed::import($blog->feed);
+                $rss = Zend_Feed_Reader::import($blog->feed);
             } catch (Exception $e) {
                 echo ' ! cannot read feed' . PHP_EOL;
                 $rss = array();
             }
         
             foreach ($rss as $item) {
-                $tags = $this->getTags($item->title() . ' ' . $item->content());
+                $tags = $this->getTags($item->getTitle() . ' ' . $item->getContent());
                 if (empty($tags)) {
                     continue;
                 }
-        
+                
+                //FIXME we sometime have empty content, just drop these post while it's fixed (this is not a mission critical project :)
+                $content = $this->cleanContent($item->getContent());
+                if (strlen($content) < 20) {
+                    continue;
+                }
+                
                 $post = array();
                 $post['blog_id'] = $blog->id;
-                $post['title'] = $item->title();
-                $post['content'] = $this->cleanContent($item->content());
-                $post['url'] = $item->link();
-                $postedOn = new Zend_Date($item->pubDate(), Zend_Date::RFC_2822); 
-                $post['posted_on'] = date('Y-m-d H:i:s', $postedOn->getTimestamp());
-                $post['guid'] = $item->guid();
+                $post['title'] = $item->getTitle();
+                $post['content'] = $this->cleanContent($item->getContent());
+                $post['url'] = $item->getLink();
+                $post['posted_on'] = date('Y-m-d H:i:s', $item->getDateCreated()->getTimestamp());
+                $post['guid'] = $item->getId();
                 $post['tags'] = Zend_Json::encode($tags);
         
                 try { 
                     $blogPost->insert($post);
-                    echo ' > ' . $item->title() . PHP_EOL;
+                    echo ' > ' . $item->getTitle() . PHP_EOL;
                 } catch (Exception $e) {
                     if (preg_match('/^(SQLSTATE\[23000\]|SQLSTATE\[HY000\])/i', $e->getMessage())) {
                         //noop don't stop on duplicate

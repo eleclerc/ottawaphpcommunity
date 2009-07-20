@@ -6,8 +6,14 @@ This is the source code of the OttawaPHPCommunity.ca website. A simple aggregato
 
 - webserver with support for PHP 5/Zend Framework
 - MySQL
-- Zend Framework 1.8+
-- ZFDebug 1.5+
+- Zend Framework 1.9+
+- ZFDebug 1.5+ (optional, disable in application.ini if you don't have/want it)
+
+## Installation
+
+### Libraries
+
+Zend and ZFDebug libraries needs to be copied into the `./Library` directory.
 
 ## Contribute
 
