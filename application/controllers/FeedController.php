@@ -35,7 +35,7 @@ class FeedController extends Zend_Controller_Action
         
         $tweetDigest = array();
         // Twitter Posting
-        foreach ($modelTwitterPost->getLatestPosts() as $post) {
+        foreach ($modelTwitterPost->getLatestPosts(50) as $post) {
             $day = date('Y-m-d', strtotime($post['posted_on']));
             ini_set('display_errors', '1'); error_reporting(E_ALL); 
             if ($day == date('Y-m-d')) {

@@ -18,7 +18,7 @@ class FetchContent
     public $whitelist;
     
     // Used to tokenize content before verifiying acceptance
-    public $tokens = " \n\t!.,?_:";
+    public $tokens = " \n\t!.,?_:;'\"#";
     
     protected $_db;
     
