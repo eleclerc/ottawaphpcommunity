@@ -8,5 +8,7 @@ library/ZFDebug
 library/Zend
 library/ZendX
 zf.php
-
+application/configs/application-prod.ini
+data/fixtures/production.sql
+scripts/deploy*
 
