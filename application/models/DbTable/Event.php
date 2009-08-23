@@ -47,8 +47,8 @@ class Model_DbTable_Event extends Zend_Db_Table_Abstract
     public function getNextEvent()
     {
         $select = $this->select()
-                       ->where('date_format(when, "%Y-%m-%d") >= date_format(now(), "%Y-%m-%d"') 
-                       ->order('when ASC');
+                       ->where('date_format(event_date, "%Y-%m-%d") >= date_format(now(), "%Y-%m-%d")')
+                       ->order('event_date ASC');
         
         return $this->fetchRow($select);
     }
