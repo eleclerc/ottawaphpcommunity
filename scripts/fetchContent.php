@@ -51,12 +51,12 @@ class FetchContent
         } else {
             $this->fetchBlogs();
             $this->fetchTwitter();
-        }
 
-        // clear all cache
-        echo PHP_EOL . '->clearing cache' . PHP_EOL;
-        $cache = Zend_Cache::Factory('Page', 'File');
-        $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+            // clear all cache
+            echo PHP_EOL . '->clearing cache' . PHP_EOL;
+            $cache = Zend_Cache::Factory('Page', 'File');
+            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+        }
     }
     
     /**
@@ -162,6 +162,13 @@ class FetchContent
      * */
     public function fetchTwitterSpecial() 
     {
+        // to filter out account we already have
+        $twitter = new Model_DbTable_Twitter();
+        $ourAccounts = array();
+        foreach ($twitter->getActiveAccounts() as $account) {
+            $ourAccounts[] = strtolower($account['screen_name']);
+        }
+        
         // search tweets from user located 25km from downtown ottawa
         // php, zend (framework), or symfony for now, because this is my favorite stuff this week
         $searchUrl = 'http://search.twitter.com/search.json?q=zf+OR+zend+OR+php+OR+symfony&geocode=45.420263%2C-75.701637%2C25km';
@@ -172,11 +179,12 @@ class FetchContent
         $content = Zend_Json::decode($response->getBody());
 
         if (!empty($content['results'])) {
-            echo 'You should consider these accounts:' . PHP_EOL;
+            echo "Here's the PHP tweets from account we don't have:" . PHP_EOL;
         }
+        
         foreach ($content['results'] as $tweet) {
             $tags = $this->getTags($tweet['text']);
-            if (!empty($tags)) {
+            if (!empty($tags) && !in_array(strtolower($tweet['from_user']), $ourAccounts)) {
                 echo ' @' . $tweet['from_user'] . ': ' . $tweet['text'] . PHP_EOL;
             }
         }
