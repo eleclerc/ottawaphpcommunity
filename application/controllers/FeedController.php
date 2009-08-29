@@ -20,14 +20,17 @@ class FeedController extends Zend_Controller_Action
  
         // Blog Posting
         foreach ($modelBlogpost->getLatestPosts() as $post) {
+            $blogUrl = str_replace('http://', '', $post['blogUrl']);
             $item = array(
                 'sortCol'     => $post['posted_on'],
                 'title'       => $post['title'],
                 'link'        => $post['url'],
                 'lastUpdate'  => strtotime($post['posted_on']),
                 'guid'        => $post['guid'],
-                'description' => strip_tags($post['content']),
-                'content'     => $post['content'],
+                'description' => 'from ' . $blogUrl . ':  ' . PHP_EOL 
+                              . strip_tags($post['content']),
+                'content'     => '<em>from ' . $blogUrl . ':</em><br />'. PHP_EOL
+                              . $post['content'],
             );
         
             $data[] = $item;
@@ -53,7 +56,6 @@ class FeedController extends Zend_Controller_Action
                     'guid'        => 'http://ottawaphpcommunity.ca/#tweets-' . $day,
                     'description' => '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL,
                     'content'     => '<strong>@' . $post['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL,
-                    'contentType' => 'twitter',
                 );
             } else {
                 $tweetDigest[$day]['description'] .= '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL;
