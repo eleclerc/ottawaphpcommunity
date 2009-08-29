@@ -75,6 +75,6 @@ class Model_Blog
             'url' => $this->_url,
             'status' => $this->_status,
             'created_at' => $this->_created_at,
-            'updated_at' => $this->_updated_at,
+            'updated_at' => $this->_updated_at);
     }
 }
