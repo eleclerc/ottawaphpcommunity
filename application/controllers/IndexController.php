@@ -24,8 +24,8 @@ class IndexController extends Zend_Controller_Action
         $this->view->twitterAccounts = $modelTwitter->getActiveAccounts();
         $this->view->blogAccounts = $modelBlog->getActiveAccounts();
         
-        // Next Event
-        $modelEvent = new Model_DbTable_Event();
-        $this->view->nextEvent = $modelEvent->getNextEvent();
+        //// Next Event
+        //$modelEvent = new Model_DbTable_Event();
+        //$this->view->nextEvent = $modelEvent->getNextEvent();
     }
 }
