@@ -15,13 +15,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $moduleLoader;
     }
 
-    protected function _initDoctype()
-    {
-        $this->bootstrap('view');
-        $view = $this->getResource('view');
-        $view->doctype('XHTML1_STRICT');
-    }
-    
     /**
      * Initialize Google Analytics Tracker
      * needs config in applications.ini as:
@@ -84,7 +77,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $db = $this->getResource('db');
 
         $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->registerNamespace('ZFDebug');
+        $autoloader->registerNamespace('ZFDebug_');
 
         $options = array(
             'plugins' => array('Variables',
