@@ -14,7 +14,7 @@ class IndexController extends Zend_Controller_Action
         $modelBlogpost = new Model_DbTable_BlogPost();
         $modelTwitterPost = new Model_DbTable_TwitterPost();
 
-        $this->view->blogposts = $modelBlogpost->getLatestPosts();
+        $this->view->blogposts = $modelBlogpost->getLatestPosts(12);
         $this->view->tweets = $modelTwitterPost->getLatestPosts();
 
         // Blog and Twitter accounts monitored

@@ -11,7 +11,7 @@
    HTML ELEMENTS
 ------------------------------------------------- */ 
 body {
-	font: 11px/165% 'Lucida Grande', Verdana, Helvetica, sans-serif;
+	font: 12px/165% 'Lucida Grande', Verdana, Helvetica, sans-serif;
 	color: #666666; 	
 	margin: 0; padding: 0 0 50px 0; 
 	background: #F6F5F5 url(../images/bg.gif) repeat-x; 
@@ -223,10 +223,10 @@ input.button {
 	font-style: italic;
 	letter-spacing: -.5px;
 	color: #7ba45b;
-	width: 400px;
+	width: 500px;
 	
 	/* change the values of top and left to adjust the position */
-	top: 175px; left: 110px;		
+	top: 175px; left: 0px;		
 }
 #header #header-image {
 	position: absolute;
@@ -323,13 +323,16 @@ input.button {
 	color: #444;
 	border: none;
 }
-/* left columns */
-#left-columns h3 {
+/* right columns */
+#right-columns h3 {
 	color: #444;
-	font: normal 2em Georgia, 'Times New Roman', Times, Serif;
-	letter-spacing: -0.5px;
-	padding: 5px 10px;
-	margin: 12px 0 5px 0;
+	font: normal 2.2em Georgia, 'Times New Roman', Times, Serif;
+	letter-spacing: -2.2px;	
+	margin-left: 5px;	
+	margin-right: 15px;
+	padding-left: 5px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #ebebeb;
 }
 
 /* sidebar menu */

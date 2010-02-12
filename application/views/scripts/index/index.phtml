@@ -1,9 +1,11 @@
 <!-- main -->
-<div id="main" class="grid_8">
+<div id="main" class="grid_10">
 
+    <h2>heard on the blogs:</h2>
+    
     <?php foreach ($this->blogposts as $post): ?>
 
-        <h2><a href="<?php echo $post['url'] ?>"><?php echo $post['title'] ?></a></h2>
+        <h3><a href="<?php echo $post['url'] ?>"><?php echo $post['title'] ?></a></h3>
 
         <p class="post-info">Posted by <a href="<?php echo $post['blogUrl'] ?>"><?php echo preg_replace('/http:\/\//', '', $post['blogUrl']) ?></a> |
           <span class="date"><?php echo date('Y-m-d', strtotime($post['posted_on'])) ?></span></p>
@@ -15,27 +17,13 @@
           matches <span><?php echo implode(', ', Zend_Json::decode($post['tags'])) ?></span></p>
 
     <?php endforeach; ?>
-
 <!-- main ends -->
 </div>
 
-<!-- left-columns starts -->
-<div id="left-columns" class="grid_8">
+<!-- right-columns starts -->
+<div id="right-columns" class="grid_6">
 
-    <div class="grid_4 alpha">
-<!--
-        <h3>NEXT EVENT</h3>
-        <div class="featured-post">
-        <?php if (! empty($this->nextEvent)): ?>
-            <h4><?php echo date('F jS, Y', strtotime($this->nextEvent->event_date)) ?></h4>
-            <p><?php echo $this->nextEvent->description ?></p>
-        <?php else: ?>
-            <h4>no known event</h4>
-            <p>no known event in the near future, contact us to add yours: opc&nbsp;]@[&nbsp;ottawaphpcommunity.ca</p>
-        <?php endif; ?>
-        </div>
--->
-        <h3>heard on Twitter</h3>
+        <h3>heard on Twitter:</h3>
 
         <?php foreach ($this->tweets as $post): ?>
 
@@ -48,34 +36,6 @@
         <?php endforeach; ?>
 
 
-    </div>
-
-    <div class="grid_4 omega">
-        <div class="sidemenu">
-            <h3>Blogs from OPC</h3>
-            <ul>
-            <?php foreach($this->blogAccounts as $account): ?>
-                <li><a href="<?php echo $account['url'] ?>"><?php echo str_replace('http://', '', $account['url']) ?></a></li>
-            <?php endforeach; ?>
-            </ul>
-        </div>
-
-        <div class="sidemenu">
-            <h3>OPC on Twitter</h3>
-            <ul>
-            <?php foreach($this->twitterAccounts as $account): ?>
-                <li><a href="http://twitter.com/<?php echo $account['screen_name'] ?>">@<?php echo $account['screen_name'] ?></a></li>
-            <?php endforeach; ?>
-            </ul>
-        </div>
-
-        <h3>Add yourself</h3>
-        <p>If you're not on the list, and would like to appear on this website, 
-            send us a short email with your blog url or twitter username and we'll add you in a timely manner.</p>
-
-        <p>opc&nbsp;]@[&nbsp;ottawaphpcommunity.ca</p>
-
-    </div>
-
-<!-- end left-columns -->
+    
+<!-- end right-columns -->
 </div>
