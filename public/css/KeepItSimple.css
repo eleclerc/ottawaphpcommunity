@@ -223,10 +223,10 @@ input.button {
 	font-style: italic;
 	letter-spacing: -.5px;
 	color: #7ba45b;
-	width: 500px;
-	
+	width: 600px;
+	text-align: left;
 	/* change the values of top and left to adjust the position */
-	top: 175px; left: 0px;		
+	top: 175px; left: 50px;		
 }
 #header #header-image {
 	position: absolute;
