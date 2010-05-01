@@ -198,7 +198,7 @@ input.button {
 	position: relative;
 	margin: 0 auto;
 	background: url(../images/border.gif) repeat-x left bottom; 	
-	height: 275px;	
+	height: 260px;	
 }
 #header h1#logo-text { margin: 0; padding: 0; }
 #header h1#logo-text a {
@@ -554,3 +554,13 @@ ol.commentlist {
 }
 
 
+.notice {
+	color: black;
+	background-color: #F5F4F3;
+	border: 1px solid #eae8e8;
+	padding: 8px 0px;
+}
+
+.notice span {
+	font-weight: bold;	
+}
