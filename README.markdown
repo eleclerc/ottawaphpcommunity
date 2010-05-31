@@ -6,7 +6,7 @@ This is the source code of the OttawaPHPCommunity.ca website. A simple aggregato
 
 - webserver with support for PHP 5/Zend Framework
 - MySQL
-- Zend Framework 1.9+
+- Zend Framework 1.10+
 - ZFDebug 1.5+ (optional, disable in application.ini if you don't have/want it)
 
 ## Installation

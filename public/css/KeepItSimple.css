@@ -198,7 +198,7 @@ input.button {
 	position: relative;
 	margin: 0 auto;
 	background: url(../images/border.gif) repeat-x left bottom; 	
-	height: 260px;	
+	height: 240px;
 }
 #header h1#logo-text { margin: 0; padding: 0; }
 #header h1#logo-text a {
