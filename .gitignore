@@ -1,13 +1,20 @@
+# OS Specific
 .DS_Store
+
+# IDE Specific
 .buildpath
 .cache
 .project
 .settings
-application/opc.db
-library/ZFDebug
-library/Zend
-library/ZendX
-zf.php
+
+# Third Party Libs
+/library/Danceric
+/library/Doctrine
+/library/Zend
+/library/ZendX
+/library/ZFDebug
+/library/ZFDoctrine
+
 application/configs/application-prod.ini
 data/fixtures/production.sql
 scripts/deploy*

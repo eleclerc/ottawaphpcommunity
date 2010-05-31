@@ -2,14 +2,14 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-    /**
-     * Autoload stuff from the default model in all modules 
-     * (Api_, Form_, Model_, Model_DbTable, Plugin_)
+	/**
+     * Autoload stuff from the default module
+     * (Form, Model, etc...)
      * */
     protected function _initAutoload()
     {
         $moduleLoader = new Zend_Application_Module_Autoloader(array(
-            'namespace' => '',
+            'namespace' => 'Default',
             'basePath'  => APPLICATION_PATH));
 
         return $moduleLoader;
@@ -60,10 +60,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $cache->start();    
         }
     }
-    
-    /**
-     * Initialize the ZFDebug Bar
-     */
+        
     protected function _initZFDebug()
     {
         $zfdebugConfig = $this->getOption('zfdebug');
@@ -71,28 +68,28 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if ($zfdebugConfig['enabled'] != 1) {
             return;
         }
-
-        // Ensure db instance is present, and fetch it
-        $this->bootstrap('db');
-        $db = $this->getResource('db');
-
+        
         $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->registerNamespace('ZFDebug_');
-
+        $autoloader->registerNamespace('ZFDebug');
+        
+        // Ensure doctrine db instance is loaded
+        $this->bootstrap('doctrine');
+        
         $options = array(
             'plugins' => array('Variables',
-                               'Database' => array('adapter' => $db),
-                               'File',
-                               'Memory',
-                               'Time',
-                               'Exception'),
-            //'jquery_path' => '/js/jquery-1.3.2.min.js'
-            );
+                'Danceric_Controller_Plugin_Debug_Plugin_Doctrine',
+                'File',
+                'Memory',
+                'Time',
+                'Exception'
+            ),
+        );
+
         $debug = new ZFDebug_Controller_Plugin_Debug($options);
 
         $this->bootstrap('frontController');
-        $frontController = $this->getResource('frontController');
-        $frontController->registerPlugin($debug);
+        $this->getResource('frontController')->registerPlugin($debug);
     }
+
 }
 

@@ -1,0 +1,53 @@
+Default_Model_Tag:
+  tableName: tag
+  actAs:  { Timestampable: ~ }
+  columns:
+    tag: { type: string(255) }
+
+Default_Model_Blog:
+  tableName: blog
+  actAs: { Timestampable: ~ }
+  columns:
+    feed: { type: string(255) }
+    url:  { type: string(255) }
+    live: { type: boolean, default: 1 }
+      
+Default_Model_BlogPost:
+  tableName: blog_post
+  actAs:  { Timestampable: ~ }
+  columns:
+    guid:       { type: string(255) }
+    title:      { type: string(255) }
+    author:     { type: string(255) }
+    content:    { type: string }
+    url:        { type: string(255) }
+    posted_on:  { type: timestamp }
+    blog_id:    { type: integer }
+    tags:       { type: string(255) }
+  relations:
+    Blog:
+      class: Default_Model_Blog
+      local: blog_id
+      foreignAlias: Posts
+
+Default_Model_Twitter:
+  tableName: twitter
+  actAs:  { Timestampable: ~ }
+  columns:
+    screen_name:  { type: string(40) }
+    live:         { type: boolean }
+
+Default_Model_TwitterPost:
+  tableName: twitter_post
+  actAs:  { Timestampable: ~ }
+  columns:
+    guid:       { type: string(255) }
+    content:    { type: string }
+    posted_on:  { type: timestamp }
+    twitter_id: { type: integer(4) }
+    tags:       { type: string(255) }
+  relations:
+    Twitter:
+      class: Default_Model_Twitter
+      local: twitter_id
+      foreignAlias: Posts

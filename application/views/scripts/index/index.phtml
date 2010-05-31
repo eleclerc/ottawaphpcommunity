@@ -7,7 +7,7 @@
 
         <h3><a href="<?php echo $post['url'] ?>"><?php echo $post['title'] ?></a></h3>
 
-        <p class="post-info">Posted by <a href="<?php echo $post['blogUrl'] ?>"><?php echo preg_replace('/http:\/\//', '', $post['blogUrl']) ?></a> |
+        <p class="post-info">Posted by <a href="<?php echo $post['Blog']['url'] ?>"><?php echo preg_replace('/http:\/\//', '', $post['Blog']['url']) ?></a> |
           <span class="date"><?php echo date('Y-m-d', strtotime($post['posted_on'])) ?></span></p>
 
         <p><?php echo $post['content'] ?></p>
@@ -28,7 +28,7 @@
         <?php foreach ($this->tweets as $post): ?>
 
             <div class="featured-post">
-                <h4><a href="http://twitter.com/<?php echo $post['screen_name'] ?>"><?php echo $post['screen_name'] ?></a></h4>
+                <h4><a href="http://twitter.com/<?php echo $post['Twitter']['screen_name'] ?>"><?php echo $post['Twitter']['screen_name'] ?></a></h4>
                 <p class="post-info">Posted on <?php echo date('Y-m-d', strtotime($post['posted_on'])) ?> at <?php echo date('H:i:s', strtotime($post['posted_on'])) ?></p>
                 <p><?php echo $post['content'] ?></p>
             </div>
