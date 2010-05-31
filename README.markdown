@@ -4,16 +4,19 @@ This is the source code of the OttawaPHPCommunity.ca website. A simple aggregato
 
 ## Requirements
 
-- webserver with support for PHP 5/Zend Framework
-- MySQL
-- Zend Framework 1.10+
-- ZFDebug 1.5+ (optional, disable in application.ini if you don't have/want it)
+Of course you need this code, and a webserver with support for PHP 5 and MySQL, but also:
+
+- [Doctrine](http://www.doctrine-project.org/projects/orm) 1.2.x
+- [Zend Framework](http://framework.zend.com) 1.10.x
+- [ZFDoctrine](http://github.com/beberlei/zf-doctrine)
+- [ZFDebug](http://code.google.com/p/zfdebug/) 1.5 (optional, disable in application.ini if you don't have/want it)
+    - [My Doctrine plugin](http://github.com/danceric/zfdebugdoctrine)
 
 ## Installation
 
 ### Libraries
 
-Zend and ZFDebug libraries needs to be copied into the `./Library` directory.
+`Danceric`, `Doctrine`, `Zend`, `ZFDebug`, and `ZFDoctrine` libraries needs to be copied into the `./Library` directory.
 
 ### Cache
 
@@ -21,9 +24,9 @@ Make sure the webserver have read/write access to the `./application/cache` dire
 
 ### Database
 
-Run the script in `./data/sql` to create the database, and then run any migration script in `./data/migrations` to get to the latest version
+Create the database with the same name as in `application/config/application.ini`, the run the script in `./data/sql` to create the tables, then run any migration script in `./data/migrations` to get to the latest version.
 
-Sample data available in `./data/fixtures` directory
+Sample data available in `./data/fixtures` directory.
 
 ## Contribute
 
