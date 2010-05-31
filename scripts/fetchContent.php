@@ -48,7 +48,7 @@ class FetchContent
     
         // if special argument is received
         if (isset($opts->d)) {
-            $this->fetchTwitterSpecial();
+            $this->fetchTwitterSpecial($opts->getRemainingArgs());
         } else {
             $this->fetchBlogs();
             $this->fetchTwitter();
@@ -154,7 +154,7 @@ class FetchContent
     /**
      * Test function to search twitter for mention of php from user close to Ottawa
      * */
-    public function fetchTwitterSpecial() 
+    public function fetchTwitterSpecial(Array $terms) 
     {
         // to filter out account we already have
         $ourAccounts = array();
@@ -163,12 +163,18 @@ class FetchContent
         }
         
         // search tweets from user located 25km from downtown ottawa
-        $q = implode('+OR+', array(
-            'php',
-            'symfony',
-            'zend',
-            'zf',
-        ));
+        if (empty($terms)) {
+            $terms = array(
+                'php',
+                'symfony',
+                'zend',
+                'zf',
+            );
+            echo 'No search terms received from the CLI. Will use the defaults.' . PHP_EOL;
+        } 
+        echo 'Search terms: ' . implode(', ', $terms) . PHP_EOL;
+        
+        $q = implode('+OR+', $terms);
         $searchUrl = 'http://search.twitter.com/search.json?q=' . $q . '&geocode=45.420263%2C-75.701637%2C25km';
 
         $client = new Zend_Http_Client();
