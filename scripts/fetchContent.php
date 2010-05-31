@@ -20,14 +20,15 @@ class FetchContent
     // Used to tokenize content before verifiying acceptance
     public $tokens = " \n\t!.,?_:;'\"#";
     
-    protected $_db;
-    
     public function __construct($application)
     {
-        $application->getBootstrap()->bootstrap(array('autoload', 'db'));
-        $this->_db = $application->getBootstrap()->getResource('db');
-        
-        $this->whitelist = $this->_db->fetchCol('SELECT LOWER(tag) FROM tag');
+        $application->getBootstrap()->bootstrap(array('autoload', 'doctrine'));
+
+        $this->whitelist = Doctrine_Query::create()
+            ->select('id, LOWER(tag) as tag')
+            ->from('Default_Model_Tag')
+            ->execute()
+                ->toKeyValueArray('id', 'tag');
     }
 
     /**
@@ -64,10 +65,7 @@ class FetchContent
      * */
     public function fetchBlogs()
     {
-        $blog = new Model_DbTable_Blog();
-        $blogPost = new Model_DbTable_BlogPost();
-        
-        foreach ($blog->fetchAll('live = 1') as $blog) {
+        foreach (Default_Model_BlogTable::getInstance()->findByLive(true) as $blog) {
             echo PHP_EOL . 'fetching blog: ' . $blog->feed . PHP_EOL;
         
             try { 
@@ -89,7 +87,7 @@ class FetchContent
                     continue;
                 }
                 
-                $post = array();
+                $post = new Default_Model_BlogPost();
                 $post['blog_id'] = $blog->id;
                 $post['title'] = $item->getTitle();
                 $post['content'] = $this->cleanContent($item->getContent());
@@ -99,8 +97,8 @@ class FetchContent
                 $post['tags'] = Zend_Json::encode($tags);
         
                 try { 
-                    $blogPost->insert($post);
-                    echo ' > ' . $item->getTitle() . PHP_EOL;
+                    $post->save();
+                    echo ' > ' . $post['title'] . PHP_EOL;
                 } catch (Exception $e) {
                     if (preg_match('/^(SQLSTATE\[23000\]|SQLSTATE\[HY000\])/i', $e->getMessage())) {
                         //noop don't stop on duplicate
@@ -121,10 +119,7 @@ class FetchContent
         
         $client = new Zend_Http_Client();
 
-        $twitter = new Model_DbTable_Twitter();
-        $twitterPost = new Model_DbTable_TwitterPost();
-
-        foreach ($twitter->fetchAll('live = 1') as $account) {
+        foreach (Default_Model_TwitterTable::getInstance()->findByLive(true) as $account) {
             echo PHP_EOL . 'fetching tweet: ' . $account->screen_name . PHP_EOL;
         
             $client->setUri($timelineUrl . $account->screen_name . '.json');
@@ -134,16 +129,15 @@ class FetchContent
             foreach ($content as $tweet) { 
                 $tags = $this->getTags($tweet['text']);
                 if (!empty($tags)) {
-                    $post = array();
+                    $post = new Default_Model_TwitterPost();
                     $post['twitter_id'] = $account->id;
                     $post['content'] = $tweet['text'];
-                    $postedOn = new Zend_Date($tweet['created_at']); 
                     $post['posted_on'] = date('Y-m-d H:i:s', strtotime($tweet['created_at']));
                     $post['guid'] = (string) $tweet['id'];
                     $post['tags'] = Zend_Json::encode($tags);
 
                     try { 
-                        $twitterPost->insert($post);
+                        $post->save();
                         echo ' > ' . $tweet['user']['screen_name'] . ': ' . $tweet['text'] . PHP_EOL;
                     } catch (Exception $e) {
                         if (preg_match('/^(SQLSTATE\[23000\]|SQLSTATE\[HY000\])/i', $e->getMessage())) {
@@ -163,15 +157,19 @@ class FetchContent
     public function fetchTwitterSpecial() 
     {
         // to filter out account we already have
-        $twitter = new Model_DbTable_Twitter();
         $ourAccounts = array();
-        foreach ($twitter->getActiveAccounts() as $account) {
+        foreach (Default_Model_TwitterTable::getInstance()->findByLive(true) as $account) {
             $ourAccounts[] = strtolower($account['screen_name']);
         }
         
         // search tweets from user located 25km from downtown ottawa
-        // php, zend (framework), or symfony for now, because this is my favorite stuff this week
-        $searchUrl = 'http://search.twitter.com/search.json?q=zf+OR+zend+OR+php+OR+symfony&geocode=45.420263%2C-75.701637%2C25km';
+        $q = implode('+OR+', array(
+            'php',
+            'symfony',
+            'zend',
+            'zf',
+        ));
+        $searchUrl = 'http://search.twitter.com/search.json?q=' . $q . '&geocode=45.420263%2C-75.701637%2C25km';
 
         $client = new Zend_Http_Client();
         $client->setUri($searchUrl);
