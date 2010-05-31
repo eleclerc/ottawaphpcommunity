@@ -2,14 +2,17 @@
 
 class FeedController extends Zend_Controller_Action
 {
+
+    public function init()
+    {
+        /* Initialize action controller here */
+    }
+
     public function indexAction()
     {
         $this->_helper->layout->disableLayout();
 
         $data = array();
-        $modelBlogpost = new Model_DbTable_BlogPost();
-        $modelTwitterPost = new Model_DbTable_TwitterPost();
-
         
         $feedData = array(
             'title' => 'Ottawa PHP Community',
@@ -19,8 +22,8 @@ class FeedController extends Zend_Controller_Action
             'description' => 'Aggregating the php developers in the Ottawa Valley');
  
         // Blog Posting
-        foreach ($modelBlogpost->getLatestPosts() as $post) {
-            $blogUrl = str_replace('http://', '', $post['blogUrl']);
+        foreach (Default_Model_BlogPostTable::getInstance()->getLatest(15) as $post) {
+            $blogUrl = str_replace('http://', '', $post['Blog']['url']);
             $item = array(
                 'sortCol'     => $post['posted_on'],
                 'title'       => $post['title'],
@@ -38,7 +41,7 @@ class FeedController extends Zend_Controller_Action
         
         $tweetDigest = array();
         // Twitter Posting
-        foreach ($modelTwitterPost->getLatestPosts(50) as $post) {
+        foreach (Default_Model_TwitterPostTable::getInstance()->getLatest(50) as $post) {
             $day = date('Y-m-d', strtotime($post['posted_on']));
             ini_set('display_errors', '1'); error_reporting(E_ALL); 
             if ($day == date('Y-m-d')) {
@@ -54,12 +57,12 @@ class FeedController extends Zend_Controller_Action
                     'link'        => 'http://ottawaphpcommunity.ca',
                     'lastUpdate'  => strtotime($post['posted_on']),
                     'guid'        => 'http://ottawaphpcommunity.ca/#tweets-' . $day,
-                    'description' => '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL,
-                    'content'     => '<strong>@' . $post['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL,
+                    'description' => '@' . $post['Twitter']['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL,
+                    'content'     => '<strong>@' . $post['Twitter']['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL,
                 );
             } else {
-                $tweetDigest[$day]['description'] .= '@' . $post['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL;
-                $tweetDigest[$day]['content'] .= '<strong>@' . $post['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL;
+                $tweetDigest[$day]['description'] .= '@' . $post['Twitter']['screen_name'] . ': ' . strip_tags($post['content']) . PHP_EOL;
+                $tweetDigest[$day]['content'] .= '<strong>@' . $post['Twitter']['screen_name'] . '</strong>: ' . $post['content'] . '<br />' . PHP_EOL;
             }
         }
         
@@ -78,4 +81,7 @@ class FeedController extends Zend_Controller_Action
         $rss->send();
         die();
     }
+
+
 }
+
