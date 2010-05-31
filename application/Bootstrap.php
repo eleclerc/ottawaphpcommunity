@@ -41,7 +41,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if ($cacheConfig['enabled']) {
             $frontendOptions = array(
                 'lifetime' => $cacheConfig['general']['lifetime'],
-                'default_options' => array('cache' => 'false'),
+                'default_options' => array('cache_with_cookie_variables' => true),
                 // Only enable for these pages
                 'regexps' => array(
                     '^/feed' => array('cache' => true),

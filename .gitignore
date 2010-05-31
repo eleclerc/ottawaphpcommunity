@@ -15,6 +15,10 @@
 /library/ZFDebug
 /library/ZFDoctrine
 
+# Temp File
+/application/cache/*
+
+# Misc
 application/configs/application-prod.ini
 data/fixtures/production.sql
 scripts/deploy*
