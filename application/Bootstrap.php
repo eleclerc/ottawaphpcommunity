@@ -49,15 +49,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
             );
 
-            $backendOptions = array('cache_dir' => APPLICATION_PATH . '/cache');
-
             $cache = Zend_Cache::factory('Page',
                 'File',
                 $frontendOptions,
-                $backendOptions
+                $cacheConfig['backend']
             );
             
-            $cache->start();    
+            $cache->start();
         }
     }
         
