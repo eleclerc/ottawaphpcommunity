@@ -20,9 +20,12 @@ class FetchContent
     // Used to tokenize content before verifiying acceptance
     public $tokens = " \n\t!.,?_:;'\"#";
     
+    protected $application;
+    
     public function __construct($application)
     {
-        $application->getBootstrap()->bootstrap(array('autoload', 'doctrine'));
+        $this->application = $application;
+        $this->application->getBootstrap()->bootstrap(array('autoload', 'doctrine'));
 
         $this->whitelist = Doctrine_Query::create()
             ->select('id, LOWER(tag) as tag')
@@ -45,7 +48,7 @@ class FetchContent
             echo $e->getUsageMessage();
             exit;
         }
-    
+        
         // if special argument is received
         if (isset($opts->d)) {
             $this->fetchTwitterSpecial($opts->getRemainingArgs());
@@ -54,9 +57,16 @@ class FetchContent
             $this->fetchTwitter();
 
             // clear all cache
-            echo PHP_EOL . '->clearing cache' . PHP_EOL;
-            $cache = Zend_Cache::Factory('Page', 'File');
-            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+            $cacheConfig = $this->application->getBootstrap()->getOption('cache');
+            if ($cacheConfig['enabled']) {
+                $cache =  Zend_Cache::factory('Page',
+                    'File',
+                    array(), 
+                    $cacheConfig['backend']
+                    );
+                echo PHP_EOL . '->clearing cache' . PHP_EOL;
+                $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+            }
         }
     }
     
