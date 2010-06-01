@@ -23,6 +23,7 @@ class Default_Model_TwitterPostTable extends Doctrine_Table
             ->from('Default_Model_TwitterPost p')
             ->leftJoin('p.Twitter t')
             ->where('t.live = ?', true)
+            ->orderBy('p.posted_on DESC')
             ->limit(20)
             ->execute();
     }

@@ -23,6 +23,7 @@ class Default_Model_BlogPostTable extends Doctrine_Table
             ->from('Default_Model_BlogPost p')
             ->leftJoin('p.Blog b')
             ->where('b.live = ?', true)
+            ->orderBy('p.posted_on DESC')
             ->limit($limit)
             ->execute();
     }
