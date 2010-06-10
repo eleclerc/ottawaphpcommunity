@@ -125,7 +125,7 @@ class FetchContent
      */
     public function fetchTwitter()
     {
-        $timelineUrl = 'http://twitter.com/statuses/user_timeline/';
+        $timelineUrl = 'http://api.twitter.com/1/statuses/user_timeline/';
         
         $client = new Zend_Http_Client();
 
@@ -188,6 +188,7 @@ class FetchContent
         $searchUrl = 'http://search.twitter.com/search.json?q=' . $q . '&geocode=45.420263%2C-75.701637%2C25km';
 
         $client = new Zend_Http_Client();
+        $client->setHeaders('user-agent', 'OttawaPHPCommunity.ca');
         $client->setUri($searchUrl);
         $response = $client->request();
         $content = Zend_Json::decode($response->getBody());
