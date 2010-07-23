@@ -1,6 +1,6 @@
 # OPC
 
-This is the source code of the OttawaPHPCommunity.ca website. A simple aggregator of what web developers in Ottawa have to share about PHP.
+This is the source code of the (now offline) OttawaPHPCommunity.ca website. A simple aggregator of what web developers in Ottawa have to share about PHP.
 
 ## Requirements
 
